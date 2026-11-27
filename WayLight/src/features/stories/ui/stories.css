@@ -1,0 +1,55 @@
+.story-editor-page { width: min(1300px,100%); min-height: 0; display: flex; flex-direction: column; margin: 0 auto; padding: 16px 0; color: #fff; }
+.story-editor-heading, .moderation-head { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+.story-editor-heading p, .story-assistant-kicker, .moderation-head p { margin: 0 0 7px; color: #aaa; font-size: 10px; letter-spacing: .14em; }
+.story-editor-heading h1 { margin: 0; font: 700 clamp(25px,3vw,38px)/1.1 'Manrope',sans-serif; letter-spacing: -.05em; }
+.story-editor-heading button, .moderation-head button, .moderation-item button { padding: 10px 14px; color: #fff; background: #101010; border: 1px solid #777; border-radius: 999px; white-space: nowrap; font-size: 11px; }
+.story-editor-layout { display: grid; grid-template-columns: minmax(0,2fr) minmax(230px,.8fr); gap: 14px; min-height: 0; flex: 1; margin-top: 16px; }
+.story-editor-main, .story-editor-assistant, .moderation { min-height: 0; padding: clamp(18px,2.4vw,28px); background: rgba(18,18,18,.96); border: 1px solid rgba(255,255,255,.23); border-radius: 28px; box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 18px 40px #000; }
+.story-editor-main { display: flex; flex-direction: column; gap: 12px; }
+.story-title-label { display: grid; gap: 8px; color: #aaa; font-size: 10px; letter-spacing: .1em; }
+.story-title-label input, .review-dialog input:not([type=checkbox]) { width: 100%; min-width: 0; padding: 11px 13px; color: #fff; background: #090909; border: 1px solid #555; border-radius: 13px; }
+.story-toolbar { display: flex; flex-wrap: wrap; gap: 6px; }
+.story-toolbar button { min-width: 34px; padding: 7px 10px; color: #eee; background: #171717; border: 1px solid #555; border-radius: 10px; font-size: 11px; }
+.story-editor-main > textarea, .story-preview { min-height: 80px; flex: 1; padding: 15px; color: #fff; background: #090909; border: 1px solid #444; border-radius: 16px; overflow-y: auto; scrollbar-width: none; font-size: 14px; line-height: 1.6; }
+.story-consent { display: flex; align-items: flex-start; gap: 8px; color: #bbb; font-size: 10px; line-height: 1.4; }
+.story-consent input { flex: 0 0 auto; accent-color: #fff; }
+.story-editor-actions { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 11px; }
+.story-editor-actions button, .review-publish { padding: 11px 15px; color: #000; background: #fff; border: 0; border-radius: 999px; font-size: 11px; font-weight: 700; }
+.story-editor-actions button:disabled, .review-publish:disabled, .story-editor-assistant button:disabled { opacity: .45; cursor: default; }
+.story-editor-assistant { overflow-y: auto; scrollbar-width: none; }
+.story-editor-assistant h2 { margin: 16px 0; font-size: clamp(22px,2.6vw,34px); line-height: 1.1; letter-spacing: -.05em; }
+.story-editor-assistant > p:not(.story-assistant-kicker), .story-editor-assistant small { display: block; color: #aaa; font-size: 11px; line-height: 1.6; }
+.story-editor-assistant button { display: block; width: 100%; margin-top: 10px; padding: 11px; text-align: left; color: #fff; background: #0b0b0b; border: 1px solid #777; border-radius: 14px; font-size: 11px; }
+.story-editor-assistant small { margin-top: 10px; }
+.story-advice { margin-top: 16px; color: #eee; font-size: 12px; }
+.moderation { width: min(100%,1000px); margin: auto; overflow-y: auto; scrollbar-width: none; }
+.moderation h2 { margin: 0; font-size: 22px; }
+.moderation-note, .moderation-list > p { color: #aaa; font-size: 12px; line-height: 1.5; }
+.moderation-list { display: grid; gap: 8px; }
+.moderation-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px; background: #090909; border: 1px solid #333; border-radius: 16px; }
+.moderation-item div { display: grid; min-width: 0; gap: 5px; }
+.moderation-item small { color: #aaa; }
+.review-overlay { position: fixed; z-index: 30; inset: 0; display: grid; place-items: center; padding: 20px; background: rgba(0,0,0,.8); }
+.review-dialog { display: flex; flex-direction: column; gap: 14px; width: min(760px,100%); max-height: calc(100dvh - 40px); padding: 24px; overflow-y: auto; color: #fff; background: #151515; border: 1px solid #666; border-radius: 28px; }
+.review-dialog label:not(.story-consent) { display: grid; gap: 7px; font-size: 12px; }
+.review-dialog textarea { min-height: 180px; padding: 12px; color: #fff; background: #090909; border: 1px solid #555; border-radius: 14px; overflow-y: auto; }
+@media(max-width:740px) { .story-editor-page { padding: 10px 0; } .story-editor-layout { grid-template-columns: 1fr; grid-template-rows: minmax(0,1fr) auto; gap: 8px; margin-top: 10px; } .story-editor-main, .story-editor-assistant { padding: 13px; border-radius: 20px; } .story-editor-main { gap: 7px; } .story-editor-assistant { max-height: 25vh; } .story-editor-assistant h2 { margin: 5px 0; font-size: 18px; } .story-editor-assistant h2 br { display: none; } .story-editor-assistant > p:not(.story-assistant-kicker) { margin-bottom: 6px; } .story-editor-assistant button { display: inline-block; width: auto; margin: 4px 4px 0 0; padding: 8px; } .story-editor-assistant small { margin-top: 3px; font-size: 9px; } .story-editor-actions button { padding: 9px; } .story-toolbar button { padding: 6px; } .moderation { padding: 16px; } }
+.story-editor-page { width: min(1380px,100%); padding: 14px; background: linear-gradient(135deg,rgba(52,52,52,.55),rgba(12,12,12,.85)); border: 1px solid rgba(255,255,255,.18); border-radius: 32px; box-shadow: inset 0 1px 0 rgba(255,255,255,.18),0 25px 70px #000; }
+.story-editor-heading { padding: 10px 14px 0; }
+.story-editor-layout { grid-template-columns: minmax(0,2fr) minmax(260px,.8fr); gap: 12px; }
+.story-editor-main, .story-editor-assistant { background: linear-gradient(150deg,rgba(255,255,255,.09),rgba(12,12,12,.9)); border: 1px solid rgba(255,255,255,.24); border-radius: 28px; box-shadow: inset 0 1px 1px rgba(255,255,255,.18),0 15px 35px rgba(0,0,0,.4); backdrop-filter: blur(16px); }
+.story-editor-assistant { display: flex; flex-direction: column; overflow: hidden; }
+.story-chat-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.story-chat-head h2 { margin: 6px 0; font-size: 22px; }
+.story-chat-head > span { display: grid; width: 38px; height: 38px; place-items: center; border: 1px solid rgba(255,255,255,.4); border-radius: 50%; box-shadow: 0 0 18px rgba(255,255,255,.13); }
+.story-editor-assistant .story-template-button { flex: 0 0 auto; width: fit-content; margin: 4px 0 12px; padding: 9px 13px; border-radius: 999px; }
+.story-chat-messages { display: flex; flex: 1; min-height: 60px; flex-direction: column; gap: 9px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #777 transparent; }
+.story-chat-welcome, .story-chat-message { max-width: 95%; padding: 11px 13px; color: #eee; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); border-radius: 17px; font-size: 12px; line-height: 1.5; }
+.story-chat-message--user { align-self: flex-end; color: #000; background: #eee; }
+.story-chat-message p { margin: 0; }
+.story-chat-input { display: flex; gap: 8px; align-items: center; margin-top: 10px; padding: 6px; background: #090909; border: 1px solid #555; border-radius: 999px; }
+.story-chat-input input { flex: 1; min-width: 0; padding: 7px; color: #fff; background: transparent; border: 0; outline: 0; font-size: 12px; }
+.story-editor-assistant .story-chat-input button { display: grid; flex: 0 0 32px; width: 32px; height: 32px; place-items: center; margin: 0; padding: 0; color: #000; background: #fff; border: 0; border-radius: 50%; font-size: 16px; }
+@media(max-width:740px) { .story-editor-page { padding: 8px; border-radius: 24px; } .story-editor-layout { grid-template-columns: minmax(0,1fr); grid-template-rows: minmax(0,1fr) minmax(130px,30vh); } .story-editor-assistant { max-height: none; } .story-editor-assistant > p:not(.story-assistant-kicker) { font-size: 9px; line-height: 1.25; } .story-chat-head h2 { font-size: 16px; } .story-chat-head > span { width: 25px; height: 25px; } .story-editor-assistant .story-template-button { margin: 2px 0 6px; padding: 5px 9px; } .story-chat-messages { min-height: 35px; } .story-chat-welcome, .story-chat-message { padding: 6px 9px; font-size: 10px; } .story-chat-input { margin-top: 5px; padding: 3px; } }
+
+.story-template-source { color: #ccc; font-size: 10px; text-underline-offset: 3px; }

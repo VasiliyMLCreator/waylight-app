@@ -1,0 +1,20 @@
+.chat-list-page { display: grid; grid-template-columns: .8fr 1.2fr; align-items: center; gap: clamp(25px,6vw,90px); width: min(1100px,100%); min-height: 0; margin: auto; }
+.chat-list-intro h1 { margin: 18px 0; color: #ffffff; font: 700 clamp(44px,6vw,76px)/.98 'Manrope',sans-serif; letter-spacing: -.07em; }
+.chat-list-intro h1 em { color: #888888; font-style: normal; }
+.chat-list-intro > p:not(.eyebrow) { color: #aaaaaa; font-size: 13px; line-height: 1.5; }
+.chat-list-create, .chat-list-empty button { display: inline-flex; align-items: center; gap: 20px; padding: 12px 18px; color: #ffffff; background: transparent; border: 1px solid rgba(255, 255, 255,.6); border-radius: 999px; font-size: 12px; }
+.chat-list-create:hover, .chat-list-empty button:hover { color: #000000; background: #ffffff; }
+.chat-list-panel { display: flex; flex-direction: column; min-height: 260px; max-height: min(490px,60vh); padding: clamp(22px,3vw,32px); background: rgba(20, 20, 20,.92); border: 1px solid rgba(255, 255, 255,.2); border-radius: 30px; }
+.chat-list-panel-heading { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255,.12); }
+.chat-list-panel-heading p { margin: 0 0 8px; color: #999999; font-size: 9px; letter-spacing: .14em; }
+.chat-list-panel-heading h2 { margin: 0; font-size: 20px; }
+.chat-list-panel-heading > span { color: #aaaaaa; font-size: 12px; }
+.chat-list-empty { display: grid; flex: 1; justify-items: start; align-content: center; gap: 10px; color: #aaaaaa; font-size: 13px; line-height: 1.6; }
+.chat-list-empty p { margin: 0; }
+.chat-list-items { min-height: 0; overflow-y: auto; scrollbar-width: none; }
+.chat-list-items::-webkit-scrollbar { display: none; }
+.chat-list-item { display: flex; justify-content: space-between; align-items: center; gap: 16px; width: 100%; padding: 17px 2px; color: #ffffff; text-align: left; background: transparent; border: 0; border-bottom: 1px solid rgba(255, 255, 255,.1); }
+.chat-list-item > span:first-child { display: grid; min-width: 0; gap: 5px; }
+.chat-list-item strong, .chat-list-item small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chat-list-item small { color: #999999; }
+@media(max-width:740px) { .chat-list-page { display: flex; flex: 1; flex-direction: column; justify-content: center; align-items: stretch; gap: 20px; } .chat-list-intro h1 { margin: 10px 0; font-size: clamp(34px,9vw,48px); } .chat-list-intro > p:not(.eyebrow) { font-size: 11px; } .chat-list-create { padding: 9px 14px; } .chat-list-panel { min-height: 200px; max-height: 38vh; padding: 20px; border-radius: 24px; } }
