@@ -1,8 +1,36 @@
 import sqlite3
+import re
 from pathlib import Path
 from app.core.config import settings
 
+class PostgresConnection:
+    def __init__(self, url):
+        import psycopg
+        from psycopg.rows import dict_row
+        self.connection = psycopg.connect(url, row_factory=dict_row)
+
+    def execute(self, query, params=()):
+        if isinstance(params, dict):
+            query = re.sub(r':([a-zA-Z_][a-zA-Z_0-9]*)', r'%(\1)s', query)
+        else:
+            query = query.replace('?', '%s')
+        return self.connection.execute(query, params)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, kind, value, traceback):
+        try:
+            if kind:
+                self.connection.rollback()
+            else:
+                self.connection.commit()
+        finally:
+            self.connection.close()
+
 def connect():
+    if settings.database_url:
+        return PostgresConnection(settings.database_url)
     db_path = Path(settings.database_path)
     db_path.parent.mkdir(parents=True, exist_ok=True)
     db = sqlite3.connect(db_path, timeout=10)
@@ -12,7 +40,7 @@ def connect():
 
 def initialize():
     with connect() as db:
-        db.executescript('''
+        schema = '''
         CREATE TABLE IF NOT EXISTS users (
             id TEXT PRIMARY KEY, email TEXT COLLATE NOCASE UNIQUE, password_hash TEXT,
             name TEXT NOT NULL DEFAULT '', first_name TEXT, last_name TEXT, login TEXT,
@@ -41,7 +69,17 @@ def initialize():
         CREATE TABLE IF NOT EXISTS oauth_states (
             state_hash TEXT PRIMARY KEY, expires_at INTEGER NOT NULL
         );
-        ''')
+        '''
+        if settings.database_url:
+            schema = schema.replace('TEXT COLLATE NOCASE UNIQUE', 'TEXT UNIQUE').replace(' REAL ', ' DOUBLE PRECISION ')
+            for statement in schema.split(';'):
+                if statement.strip():
+                    db.execute(statement)
+            db.execute('CREATE UNIQUE INDEX IF NOT EXISTS users_email_ci_idx ON users (lower(email))')
+            db.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS role TEXT NOT NULL DEFAULT 'user'")
+            db.execute('ALTER TABLE chats ADD COLUMN IF NOT EXISTS title_manual INTEGER NOT NULL DEFAULT 0')
+            return
+        db.executescript(schema)
         user_columns = {row['name'] for row in db.execute('PRAGMA table_info(users)')}
         if 'role' not in user_columns:
             db.execute("ALTER TABLE users ADD COLUMN role TEXT NOT NULL DEFAULT 'user'")

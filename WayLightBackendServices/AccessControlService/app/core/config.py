@@ -15,5 +15,6 @@ class Settings:
     ai_prompt = os.getenv('YANDEX_AI_PROMPT_ID', 'fvt8a76670rent0le1ti').strip()
     cookie_secure = os.getenv('SESSION_COOKIE_SECURE', 'false').lower() == 'true'
     database_path = os.getenv('DATABASE_PATH', './data/access.db')
+    database_url = os.getenv('DATABASE_URL', '').strip()
 
 settings = Settings()

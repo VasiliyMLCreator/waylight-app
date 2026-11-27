@@ -31,7 +31,7 @@ def read_chat(db, chat_id, user_id):
     chat = db.execute('SELECT * FROM chats WHERE id=? AND user_id=?', (chat_id, user_id)).fetchone()
     if not chat:
         raise HTTPException(404, 'Чат не найден')
-    messages = db.execute('SELECT id,role,text,mode FROM messages WHERE chat_id=? ORDER BY created_at, rowid', (chat_id,)).fetchall()
+    messages = db.execute('SELECT id,role,text,mode FROM messages WHERE chat_id=? ORDER BY created_at, id', (chat_id,)).fetchall()
     return {'id': chat['id'], 'title': chat['title'], 'isPinned': bool(chat['pinned']), 'isTitleManual': bool(chat['title_manual']), 'messages': [dict(item) for item in messages]}
 
 @router.get('')
@@ -138,7 +138,7 @@ async def send_message(chat_id: str, data: MessageCreate, user=Depends(current_u
             raise HTTPException(400, 'Некорректная история чата')
         replace_row = None
         if data.replace_message_id:
-            rows = db.execute('SELECT rowid,* FROM messages WHERE chat_id=? ORDER BY created_at, rowid', (chat_id,)).fetchall()
+            rows = db.execute('SELECT * FROM messages WHERE chat_id=? ORDER BY created_at, id', (chat_id,)).fetchall()
             positions = [i for i, row in enumerate(rows) if row['id'] == data.replace_message_id]
             if not positions:
                 raise HTTPException(404, 'Сообщение не найдено')
@@ -152,7 +152,7 @@ async def send_message(chat_id: str, data: MessageCreate, user=Depends(current_u
                 if target['role'] != 'user' or position < len(rows) - 2 or any(row['role'] != 'assistant' for row in rows[position+1:]):
                     raise HTTPException(409, 'Можно изменить только последнее сообщение')
                 history_rows = rows[:position]
-            replace_row = target['rowid']
+            replace_row = (target['created_at'], target['id'])
             history = [{'role': row['role'], 'content': row['text']} for row in history_rows]
             if target['role'] == 'user': history.append({'role': 'user', 'content': data.text.strip()})
         else:
@@ -234,11 +234,11 @@ async def send_message(chat_id: str, data: MessageCreate, user=Depends(current_u
             with connect() as db:
                 if db.execute('SELECT 1 FROM chats WHERE id=? AND user_id=?', (chat_id, user['id'])).fetchone():
                     if replace_row is not None:
-                        current = db.execute('SELECT rowid FROM messages WHERE chat_id=? AND id=?', (chat_id, data.replace_message_id)).fetchone()
-                        tail = db.execute('SELECT id FROM messages WHERE chat_id=? AND rowid>=? ORDER BY created_at,rowid', (chat_id, replace_row)).fetchall()
+                        current = db.execute('SELECT id FROM messages WHERE chat_id=? AND id=?', (chat_id, data.replace_message_id)).fetchone()
+                        tail = db.execute('SELECT id FROM messages WHERE chat_id=? AND (created_at>? OR (created_at=? AND id>=?)) ORDER BY created_at,id', (chat_id, replace_row[0], replace_row[0], replace_row[1])).fetchall()
                         if not current or [row['id'] for row in tail] != [row['id'] for row in rows[position:]]:
                             raise ValueError('История диалога изменилась')
-                        db.execute('DELETE FROM messages WHERE chat_id=? AND rowid>=?', (chat_id, replace_row))
+                        db.execute('DELETE FROM messages WHERE chat_id=? AND (created_at>? OR (created_at=? AND id>=?))', (chat_id, replace_row[0], replace_row[0], replace_row[1]))
                         if target['role'] == 'user':
                             db.execute('INSERT INTO messages VALUES(?,?,?,?,?,?)', (str(uuid.uuid4()), chat_id, 'user', data.text.strip(), data.mode, time.time()))
                     db.execute('INSERT INTO messages VALUES(?,?,?,?,?,?)', (str(uuid.uuid4()), chat_id, 'assistant', answer, data.mode, time.time()))

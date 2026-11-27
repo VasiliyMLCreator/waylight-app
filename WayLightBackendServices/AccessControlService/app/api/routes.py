@@ -1,5 +1,6 @@
 import secrets
 import sqlite3
+from psycopg import IntegrityError as PostgresIntegrityError
 import time
 import uuid
 from urllib.parse import urlencode
@@ -21,7 +22,7 @@ def register(data: Registration, response: Response):
         with connect() as db:
             db.execute('INSERT INTO users (id,email,password_hash,name,created_at,role) VALUES (?,?,?,?,?,?)', (user_id, data.email, hasher.hash(data.password), data.name, int(time.time()), data.role))
             user = db.execute('SELECT * FROM users WHERE id=?', (user_id,)).fetchone()
-    except sqlite3.IntegrityError:
+    except (sqlite3.IntegrityError, PostgresIntegrityError):
         raise HTTPException(409, 'Аккаунт с такой почтой уже существует')
     issue_session(response, user_id)
     return public_user(user)
